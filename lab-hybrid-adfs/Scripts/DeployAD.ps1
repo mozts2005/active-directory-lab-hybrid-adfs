@@ -7,7 +7,7 @@ param (
 
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 
 $completeFile="c:\temp\prereqsComplete"
 if (!(Test-Path -Path "c:\temp")) {

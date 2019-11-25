@@ -18,7 +18,7 @@ Import-Module Az
 
     $userName                = "adminUser"
     $secpasswd               = "Cr@zyP@ssword"
-    $adDomainName            = "adfstest.com"
+    $adDomainName            = "adfstest2.com"
     $usersArray              = @(
                                 @{ "FName"= "Bob";  "LName"= "Jones";    "SAM"= "bjones" },
                                 @{ "FName"= "Bill"; "LName"= "Smith";    "SAM"= "bsmith" },
@@ -83,6 +83,7 @@ catch {
     $RG = New-AzResourceGroup -Name $RGName -Location $DeployRegion -Tag @{ Shutdown = "true"; Startup = "false"}
     Write-Host "Created new resource group $RGName."
 }
+$version = 1
 $version ++
 $deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateUri $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
 #$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateFile $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
