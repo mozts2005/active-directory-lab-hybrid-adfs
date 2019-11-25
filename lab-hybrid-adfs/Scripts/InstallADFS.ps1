@@ -48,7 +48,7 @@ if (-not $elevated) {
 	Write-Host "Subject: $Subject"
 
     #get thumbprint of certificate
-    $cert = Get-ChildItem Cert:\LocalMachine\My | where {$_.Subject -eq "CN=$Subject"}
+    $cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Subject -eq "CN=$Subject"}
 	try {
 	    Get-ADfsProperties -ErrorAction Stop
         Write-Host "Farm already configured" -Verbose
@@ -66,7 +66,7 @@ if (-not $elevated) {
 	}
  
 	# Install AAD Tools
-	md c:\temp -ErrorAction Ignore
+	mkdir c:\temp -ErrorAction Ignore
 	Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 
 	#Install-Module -Name Azure -AllowClobber -Force
@@ -79,7 +79,7 @@ if (-not $elevated) {
 	Install-Module -Name AzureADPreview -AllowClobber -Force
 
     # Setup Shortcuts
-	md c:\AADLab -ErrorAction Ignore
+	mkdir c:\AADLab -ErrorAction Ignore
 
 	$WshShell = New-Object -comObject WScript.Shell
 	$dt="C:\Users\Public\Desktop\"

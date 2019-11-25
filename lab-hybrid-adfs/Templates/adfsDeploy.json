@@ -98,8 +98,6 @@
     "adfsNICName": "[concat('adfs-',parameters('NetworkInterfaceName'),parameters('deploymentNumber'))]",
     "adfsPubIpName": "[concat('ADFSPubIP', parameters('deploymentNumber'))]",
     "adSubnetID": "[concat(variables('vnetID'),'/subnets/',parameters('adSubnetName'))]",
-    "apiVersion": "2015-06-15",
-    "computeApiVersion": "2016-04-30-preview",
     "dmzSubnetID": "[concat(variables('vnetID'),'/subnets/',parameters('dmzSubnetName'))]",
     "domainJoinOptions": "3",
     "imageOffer": "WindowsServer",
@@ -114,13 +112,13 @@
   "resources": [
     {
       "name": "[concat(variables('adfsPubIpName'), copyIndex(1))]",
+      "apiVersion": "[providers('Microsoft.Network','publicIPAddresses').apiVersions[0]]",
       "type": "Microsoft.Network/publicIPAddresses",
       "location": "[parameters('location')]",
       "copy": {
         "name": "adfsIpCopy",
         "count": "[variables('adfsDeployCount')]"
       },
-      "apiVersion": "2017-06-01",
       "tags": {
         "displayName": "adfsPubIp"
       },
@@ -139,7 +137,7 @@
         "name": "wapIpCopy",
         "count": "[variables('adfsDeployCount')]"
       },
-      "apiVersion": "2017-06-01",
+      "apiVersion": "[providers('Microsoft.Network','publicIPAddresses').apiVersions[0]]",
       "tags": {
         "displayName": "wapPubIp"
       },
@@ -151,7 +149,7 @@
       }
     },
     {
-      "apiVersion": "2017-06-01",
+     "apiVersion": "[providers('Microsoft.Network','networkInterfaces').apiVersions[0]]",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(variables('adfsNICName'), copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -241,8 +239,12 @@
             "version": "latest"
           },
           "osDisk": {
+            "name": "[concat(parameters('adfsVMName'),'_OSDisk')]",
             "caching": "ReadWrite",
-            "createOption": "FromImage"
+            "createOption": "FromImage",
+             "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            }
           }
         },
         "networkProfile": {
@@ -257,7 +259,7 @@
       ]
     },
     {
-      "apiVersion": "2018-06-01",
+      "apiVersion": "[providers('Microsoft.Compute','virtualMachines').apiVersions[0]]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('adfsVMName'), copyIndex(1), '/joindomain')]",
       "location": "[parameters('location')]",
@@ -290,7 +292,7 @@
       }
     },
     {
-      "apiVersion": "2017-03-30",
+     "apiVersion": "[providers('Microsoft.Compute','virtualMachines').apiVersions[0]]",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('wapVMName'), copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -319,8 +321,12 @@
             "version": "latest"
           },
           "osDisk": {
+            "name": "[concat(parameters('wapVMName'),'_OSDisk')]",
             "caching": "ReadWrite",
-            "createOption": "FromImage"
+           "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            }
           }
         },
         "networkProfile": {

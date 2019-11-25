@@ -36,7 +36,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "[providers('Microsoft.Network','networkSecurityGroups').apiVersions[0]]",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('adNSGName')]",
       "location": "[variables('location')]",
@@ -455,7 +455,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "[providers('Microsoft.Network','networkSecurityGroups').apiVersions[0]]",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('DMZNSGName')]",
       "location": "[variables('location')]",
@@ -496,7 +496,7 @@
       }
     },
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "[providers('Microsoft.Network','networkSecurityGroups').apiVersions[0]]",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('cliNSGName')]",
       "location": "[variables('location')]",

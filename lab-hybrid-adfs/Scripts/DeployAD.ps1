@@ -18,7 +18,7 @@ $step=1
 if (!(Test-Path -Path "$($completeFile)$step")) {
     # Shortcuts
 	if (!(Test-Path -Path "c:\AADLab")) {
-		md "c:\AADLab" -ErrorAction Ignore
+		mkdir "c:\AADLab" -ErrorAction Ignore
 	}
 
 	$WshShell = New-Object -comObject WScript.Shell
@@ -58,8 +58,8 @@ if (!(Test-Path -Path "$($completeFile)$step")) {
                            -IncludeAllSubFeature 
 
     Install-ADDSForest -DomainName $domain `
-                       -DomainMode WinThreshold `
-                       -ForestMode WinThreshold `
+                       -DomainMode Win2016 `
+                       -ForestMode Win2016 `
                        -Force `
                        -SafeModeAdministratorPassword $smPassword 
 

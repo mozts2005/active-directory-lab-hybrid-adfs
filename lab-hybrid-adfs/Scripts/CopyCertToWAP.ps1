@@ -25,8 +25,8 @@ $Subject=$null
 [System.Management.Automation.PSCredential]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($adminuser)", $SecPW)
 
 $completeFile="c:\temp\prereqsComplete"
-md "c:\temp" -ErrorAction Ignore
-md "c:\AADLab" -ErrorAction Ignore
+mkdir "c:\temp" -ErrorAction Ignore
+mkdir "c:\AADLab" -ErrorAction Ignore
 
 if (!(Test-Path -Path "$($completeFile)0")) {
     $PathToCert="\\$DCFQDN\src"

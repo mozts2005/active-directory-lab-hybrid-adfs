@@ -10,7 +10,7 @@ Import-Module Az
 
     # Must be unique for simultaneous/co-existing deployments
     #"master" or "dev"
-    $RGName                  = "adfstestRG"
+    $RGName                  = "adfstest2RG"
     $DeployRegion            = "CentralUS"
 
     $Branch                  = "master"
