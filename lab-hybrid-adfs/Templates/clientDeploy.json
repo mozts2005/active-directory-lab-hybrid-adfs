@@ -33,7 +33,7 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_A1_v2",
+      "defaultValue": "Standard_B2S_v2",
       "metadata": { "description": "Select a VM SKU" }
     },
     "assetLocation": {

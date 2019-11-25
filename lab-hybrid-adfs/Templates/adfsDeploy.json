@@ -104,7 +104,7 @@
     "domainJoinOptions": "3",
     "imageOffer": "WindowsServer",
     "imagePublisher": "MicrosoftWindowsServer",
-    "imageSKU": "2012-R2-Datacenter",
+    "imageSKU": "2016-Datacenter",
     "publicIPAddressDNSName": "[tolower(parameters('publicIPAddressDNSName'))]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "wapDSCConfigurationFunction": "wapDSCConfiguration.ps1\\Main",

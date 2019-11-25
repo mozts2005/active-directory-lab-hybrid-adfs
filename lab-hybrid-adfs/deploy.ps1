@@ -1,24 +1,24 @@
 ﻿$startTime=Get-Date
 Write-Host "Beginning deployment at $starttime"
 
-Import-Module Azure -ErrorAction SilentlyContinue
+Import-Module Az
 
 #DEPLOYMENT OPTIONS
     $templateToDeploy        = "FullDeploy.json"
     # MUST be unique for all your simultaneous/co-existing deployments of this ADName in the same region
-    $VNetAddrSpace2ndOctet   = "<ENTER A UNIQUE DEPLOYMENT NUMBER, 0-9>"
+    $VNetAddrSpace2ndOctet   = "0"
 
     # Must be unique for simultaneous/co-existing deployments
     #"master" or "dev"
-    $RGName                  = "<YOUR RESOURCE GROUP>"
-    $DeployRegion            = "<SELECT AZURE REGION>"
+    $RGName                  = "adfstestRG"
+    $DeployRegion            = "CentralUS"
 
     $Branch                  = "master"
-    $AssetLocation           = "https://raw.githubusercontent.com/Azure-Samples/active-directory-lab-hybrid-adfs/$Branch/lab-hybrid-adfs/"
+    $AssetLocation           = "https://raw.githubusercontent.com/mozts2005/active-directory-lab-hybrid-adfs/$Branch/lab-hybrid-adfs/"
 
-    $userName                = "<AD ADMINISTRATOR LOGIN>"
-    $secpasswd               = “<AD ADMINISTRATOR PASSWORD>”
-    $adDomainName            = "<2-PART AD DOMAIN NAME, LIKE CONTOSO.COM>"
+    $userName                = "adminUser"
+    $secpasswd               = "Cr@zyP@ssword"
+    $adDomainName            = "adfstest.com"
     $usersArray              = @(
                                 @{ "FName"= "Bob";  "LName"= "Jones";    "SAM"= "bjones" },
                                 @{ "FName"= "Bill"; "LName"= "Smith";    "SAM"= "bsmith" },
@@ -30,14 +30,14 @@ Import-Module Azure -ErrorAction SilentlyContinue
     # ClientsToDeploy, array, possible values: "7","8","10-1607","10-1511","10-1703"
     # Examples: Single Win7 VM = @("7")
     #           Two Win7, one Win10 Creators = "7","7","10-1703"
-    $clientsToDeploy         = @("7")
+    $clientsToDeploy         = @("10-1909")
     $RDPWidth                = 1920
     $RDPHeight               = 1080
 
     #Enter the full Azure ARM resource string to the location where you store your client images.
     #Your images MUST be named: OSImage_Win<version>
     #Path will be like: "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<RG holding your images>/providers/Microsoft.Compute/images/"
-    $clientImageBaseResource = "<ARM resource path to your VM Client image base>"
+    $clientImageBaseResource = "/subscriptions/baf03da1-35c6-4ae9-aa40-b58aa49ef403/resourceGroups/TestImage/providers/Microsoft.Compute/images/"
 
     # This will deploy X number of distinct ADFS farms, each with a single WAP proxy deployed in the DMZ.
     $AdfsFarmCount           = "1";
@@ -45,10 +45,10 @@ Import-Module Azure -ErrorAction SilentlyContinue
 #END DEPLOYMENT OPTIONS
 
 #Dot-sourced variable override (optional, comment out if not using)
-. C:\dev\A_CustomDeploySettings\lab-hybrid-adfs.ps1
+#. C:\dev\A_CustomDeploySettings\lab-hybrid-adfs.ps1
 
 #ensure we're logged in
-Get-AzureRmContext -ErrorAction Stop
+Get-AzContext -ErrorAction Stop
 
 #deploy
 $parms=@{
@@ -70,23 +70,24 @@ $parms=@{
     "clientImageBaseResource"     = $clientImageBaseResource;
     "AdfsFarmCount"               = $AdfsFarmCount;
     "usersArray"                  = $usersArray;
-    "defaultUserPassword"         = "P@ssw0rd";
+    "defaultUserPassword"         = $defaultUserPassword;
 }
 
 $TemplateFile = "$($assetLocation)$templateToDeploy" + "?x=5"
 
 try {
-    Get-AzureRmResourceGroup -Name $RGName -ErrorAction Stop
+    Get-AzResourceGroup -Name $RGName -ErrorAction Stop
     Write-Host "Resource group $RGName exists, updating deployment"
 }
 catch {
-    $RG = New-AzureRmResourceGroup -Name $RGName -Location $DeployRegion -Tag @{ Shutdown = "true"; Startup = "false"}
+    $RG = New-AzResourceGroup -Name $RGName -Location $DeployRegion -Tag @{ Shutdown = "true"; Startup = "false"}
     Write-Host "Created new resource group $RGName."
 }
 $version ++
-$deployment = New-AzureRmResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateFile $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
+#$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateUri $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
+$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateFile $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
 
-if ($deployment) {
+if ($true) {
     if (-not (Get-Command Get-FQDNForVM -ErrorAction SilentlyContinue)) {
         #load add-on functions to facilitate the RDP connectoid creation below
         $url="$($assetLocation)Scripts/Addons.ps1"
@@ -101,7 +102,7 @@ if ($deployment) {
         md $RDPFolder
     }
     $ADName = $ADDomainName.Split('.')[0]
-    $vms = Find-AzureRmResource -ResourceGroupNameContains $RGName | where {($_.ResourceType -like "Microsoft.Compute/virtualMachines")}
+    $vms = Get-AzResource -ResourceGroupName $RGName | where {($_.ResourceType -like "Microsoft.Compute/virtualMachines")}
     $pxcount=0
     if ($vms) {
         foreach ($vm in $vms) {
