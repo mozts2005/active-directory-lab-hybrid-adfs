@@ -489,7 +489,7 @@
           "adDomainName": { "value": "[parameters('adDomainName')]" },
           "clientImageBaseResource": { "value": "[parameters('clientImageBaseResource')]" },
           "clientsToDeploy": { "value": "[parameters('clientsToDeploy')]" },
-          "vmSize": { "value": "[parameters('vmSize')]" },
+          "vmSize": { "value": "Standard_B2s" },
           "assetLocation": { "value": "[parameters('assetLocation')]" }
         }
       }

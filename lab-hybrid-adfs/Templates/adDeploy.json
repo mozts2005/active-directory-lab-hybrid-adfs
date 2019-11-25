@@ -110,7 +110,7 @@
       }
     },
     {
-      "apiVersion": "[variables('computeApiVersion')]",
+      "apiVersion": "2017-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('adVMName')]",
       "location": "[parameters('location')]",
@@ -152,7 +152,7 @@
           "name": "DeployAD",
           "type": "extensions",
           "location": "[resourceGroup().location]",
-          "apiVersion": "2015-06-15",
+          "apiVersion": "2017-03-30",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', concat(parameters('adVMName')))]"
           ],

@@ -120,7 +120,7 @@
         "name": "adfsIpCopy",
         "count": "[variables('adfsDeployCount')]"
       },
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2017-06-01",
       "tags": {
         "displayName": "adfsPubIp"
       },
@@ -139,7 +139,7 @@
         "name": "wapIpCopy",
         "count": "[variables('adfsDeployCount')]"
       },
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2017-06-01",
       "tags": {
         "displayName": "wapPubIp"
       },
@@ -151,7 +151,7 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2017-06-01",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(variables('adfsNICName'), copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -182,7 +182,7 @@
       }
     },
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2017-06-01",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(variables('wapNICName'), copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -212,7 +212,7 @@
       }
     },
     {
-      "apiVersion": "[variables('computeApiVersion')]",
+      "apiVersion": "2017-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('adfsVMName'), copyIndex(1))]",
       "location": "[parameters('location')]",
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2018-06-01",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('adfsVMName'), copyIndex(1), '/joindomain')]",
       "location": "[parameters('location')]",
@@ -290,7 +290,7 @@
       }
     },
     {
-      "apiVersion": "[variables('computeApiVersion')]",
+      "apiVersion": "2017-03-30",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[concat(parameters('wapVMName'), copyIndex(1))]",
       "location": "[parameters('location')]",

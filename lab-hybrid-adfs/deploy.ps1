@@ -84,8 +84,8 @@ catch {
     Write-Host "Created new resource group $RGName."
 }
 $version ++
-#$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateUri $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
-$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateFile $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
+$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateUri $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
+#$deployment = New-AzResourceGroupDeployment -ResourceGroupName $RGName -TemplateParameterObject $parms -TemplateFile $TemplateFile -Name "adfsDeploy$version"  -Force -Verbose
 
 if ($true) {
     if (-not (Get-Command Get-FQDNForVM -ErrorAction SilentlyContinue)) {
